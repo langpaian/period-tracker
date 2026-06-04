@@ -171,7 +171,7 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed, onMounted, watch } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { usePeriodStore } from '../stores/period'
 
@@ -223,6 +223,19 @@ const recentRecords = computed(() => {
     .sort((a, b) => new Date(b.startDate) - new Date(a.startDate))
     .filter(r => r.id !== editId.value)
     .slice(0, 5)
+})
+
+// Simple "quick add" mode - end date auto-filled
+const useSimpleMode = ref(true)
+
+// Watch for start date changes in simple mode
+watch(() => form.value.startDate, () => {
+  if (useSimpleMode.value && form.value.startDate) {
+    form.value.endDate = store.calculateEndDate(
+      form.value.startDate, 
+      store.settings.averagePeriodDays
+    )
+  }
 })
 
 // Toggle symptom

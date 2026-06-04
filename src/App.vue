@@ -39,9 +39,20 @@
 
 <script setup>
 import { computed, onMounted } from 'vue'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
+import { usePeriodStore } from './stores/period'
 
 const route = useRoute()
+const router = useRouter()
+const store = usePeriodStore()
+
+// Check onboarding on mount
+onMounted(() => {
+  store.loadData()
+  if (!store.hasCompletedOnboarding && route.path !== '/onboarding') {
+    router.replace('/onboarding')
+  }
+})
 
 const showTabBar = computed(() => true)
 const showHeader = computed(() => false)
