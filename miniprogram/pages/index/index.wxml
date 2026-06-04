@@ -1,0 +1,152 @@
+<!--pages/index/index.wxml-->
+<view class="container {{isXiaoNote7Pro ? 'xiao-note-7-pro' : ''}} {{deviceModel ? (deviceModel.includes('iPhone') ? 'ios-device' : 'android-device') : ''}}">
+  <!-- 经期状态卡片 -->
+  <view class="status-card" style="background: linear-gradient(135deg, #FF6B81 0%, #FF8FA3 100%)">
+    <view class="status-title">
+      <text wx:if="{{isPeriod}}">🔴 经期中</text>
+      <text wx:elif="{{isOvulation}}">🟢 排卵期</text>
+      <text wx:else>📅 安全期</text>
+    </view>
+    
+    <view class="status-days">
+      <text wx:if="{{isPeriod}}">第 {{periodDay}} 天</text>
+      <text wx:elif="{{isOvulation}}">排卵倒计时 {{ovulationDays}} 天</text>
+      <text wx:else>下次经期还有 {{nextPeriodDays}} 天</text>
+    </view>
+    
+    <view class="status-tip">
+      <text wx:if="{{isPeriod}}">注意保暖，避免生冷食物</text>
+      <text wx:elif="{{isOvulation}}">易孕期，注意避孕/备孕</text>
+      <text wx:else>保持良好作息，适度运动</text>
+    </view>
+  </view>
+  
+  <!-- 日历视图 -->
+  <view class="calendar-card">
+    <view class="calendar-header">
+      <text class="nav-btn" bindtap="prevMonth">‹</text>
+      <view class="calendar-title-box" bindtap="selectMonth">
+        <text class="calendar-title">{{currentYear}}年{{currentMonth}}月</text>
+        <text class="calendar-arrow">⌄</text>
+      </view>
+      <text class="nav-btn" bindtap="nextMonth">›</text>
+    </view>
+    
+    <view class="calendar-weekdays">
+      <text class="weekday">日</text>
+      <text class="weekday">一</text>
+      <text class="weekday">二</text>
+      <text class="weekday">三</text>
+      <text class="weekday">四</text>
+      <text class="weekday">五</text>
+      <text class="weekday">六</text>
+    </view>
+    
+    <view class="calendar-days"
+      bindtouchstart="onTouchStart"
+      bindtouchmove="onTouchMove"
+      bindtouchend="onTouchEnd"
+      bindtouchcancel="onTouchCancel"
+    >
+      <view
+        class="day-item {{item.isToday ? 'today' : ''}} {{item.isPeriod ? 'period' : ''}} {{item.isPredictedPeriod ? 'predicted-period' : ''}} {{item.isOvulation ? 'ovulation' : ''}} {{item.isPredictedOvulation ? 'predicted-ovulation' : ''}} {{item.isSelected ? 'selected' : ''}} {{item.isRangeSelected ? 'range-selected' : ''}} {{item.isRangeStart ? 'range-start' : ''}} {{item.isRangeEnd ? 'range-end' : ''}}"
+        wx:for="{{calendarDays}}"
+        wx:key="date"
+        bindtap="onDayTap"
+        data-date="{{item.date}}"
+        hover-class="day-hover"
+      >
+        <text class="day-num">{{item.day}}</text>
+        <text class="day-mark" wx:if="{{item.isPeriod}}">🔴</text>
+        <text class="day-mark" wx:elif="{{item.isPredictedPeriod}}">🔸</text>
+        <text class="day-mark" wx:elif="{{item.isOvulation}}">🟢</text>
+        <text class="day-mark" wx:elif="{{item.isPredictedOvulation}}">🟤</text>
+        <text class="day-mark" wx:if="{{item.hasSymptoms}}" bindtap="onSymptomTap" data-date="{{item.date}}">💊</text>
+        <text class="day-mark" wx:if="{{item.hasNote}}" bindtap="onNoteTap" data-date="{{item.date}}">📝</text>
+      </view>
+    </view>
+    
+    <view class="calendar-legend">
+      <view class="legend-item">
+        <text class="legend-mark">🔴</text>
+        <text class="legend-text">经期</text>
+      </view>
+      <view class="legend-item">
+        <text class="legend-mark">🔸</text>
+        <text class="legend-text">预测经期</text>
+      </view>
+      <view class="legend-item">
+        <text class="legend-mark">🟢</text>
+        <text class="legend-text">排卵</text>
+      </view>
+      <view class="legend-item">
+        <text class="legend-mark">💊</text>
+        <text class="legend-text">症状</text>
+      </view>
+      <view class="legend-item">
+        <text class="legend-dot today"></text>
+        <text class="legend-text">今天</text>
+      </view>
+    </view>
+  </view>
+  
+  <!-- 预测信息 -->
+  <view class="prediction-card">
+    <view class="prediction-title">📊 预测信息</view>
+    <view class="prediction-grid">
+      <view class="prediction-item">
+        <text class="label">下次经期</text>
+        <text class="value">{{nextPeriodDate}}</text>
+      </view>
+      <view class="prediction-item">
+        <text class="label">排卵日</text>
+        <text class="value">{{ovulationDate}}</text>
+      </view>
+      <view class="prediction-item">
+        <text class="label">平均周期</text>
+        <text class="value">{{avgCycle}} 天</text>
+      </view>
+      <view class="prediction-item">
+        <text class="label">平均经期</text>
+        <text class="value">{{avgPeriod}} 天</text>
+      </view>
+    </view>
+  </view>
+  
+  <!-- 快捷功能 -->
+  <view class="quick-actions">
+    <view class="action-item" bindtap="goToRecord">
+      <view class="action-icon">✏️</view>
+      <view class="action-text">记录今天</view>
+    </view>
+    <view class="action-item" bindtap="goToHistory">
+      <view class="action-icon">📋</view>
+      <view class="action-text">历史记录</view>
+    </view>
+    <view class="action-item" bindtap="goToProfile">
+      <view class="action-icon">👤</view>
+      <view class="action-text">个人中心</view>
+    </view>
+  </view>
+  
+  <!-- 记录按钮 -->
+  <view class="record-btn" bindtap="startRecord">
+    <text>记一下</text>
+  </view>
+
+  <!-- 备注弹窗 -->
+  <view class="note-modal {{noteModalVisible ? 'show' : ''}}" wx:if="{{noteModalVisible}}" bindtap="hideNoteModal">
+    <view class="note-modal-content" catchtap="true">
+      <view class="note-modal-header">
+        <text class="note-modal-title">📝 备注内容</text>
+        <text class="note-modal-close" bindtap="hideNoteModal">✕</text>
+      </view>
+      <view class="note-modal-date">{{noteModalDate}}</view>
+      <view class="note-modal-body">{{noteModalContent}}</view>
+      <view class="note-modal-footer">
+        <view class="note-modal-btn" bindtap="editNote">✏️ 编辑</view>
+        <view class="note-modal-btn primary" bindtap="hideNoteModal">知道了</view>
+      </view>
+    </view>
+  </view>
+</view>

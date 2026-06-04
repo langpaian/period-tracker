@@ -1,0 +1,76 @@
+<!--pages/predict/predict.wxml-->
+<view class="container">
+  <!-- 页面标题 -->
+  <view class="page-title">智能预测</view>
+
+  <!-- 下次经期预测 -->
+  <view class="card predict-card primary">
+    <view class="predict-icon">📅</view>
+    <view class="predict-title">下次经期</view>
+    <view class="predict-date">{{nextPeriodDate}}</view>
+    <view class="predict-days">还有 {{daysToNext}} 天</view>
+    <view class="predict-confidence">
+      <view class="confidence-bar">
+        <view class="confidence-fill" style="width: {{confidence}}%;"></view>
+      </view>
+      <text>置信度 {{confidence}}%</text>
+    </view>
+  </view>
+
+  <!-- 排卵期预测 -->
+  <view class="card predict-card ovulation" wx:if="{{ovulationDate}}">
+    <view class="predict-icon">🥚</view>
+    <view class="predict-title">排卵日</view>
+    <view class="predict-date">{{ovulationDate}}</view>
+    <view class="predict-days">还有 {{daysToOvulation}} 天</view>
+    <view class="ovulation-tip">
+      <text wx:if="{{isEasyPregnant}}">⚠️ 易孕期，{{fertileTip}}</text>
+      <text wx:else>安全期</text>
+    </view>
+  </view>
+
+  <!-- 易孕期 -->
+  <view class="card fertile-card" wx:if="{{fertileWindow}}">
+    <view class="card-title">📆 易孕期</view>
+    <view class="fertile-window">
+      <text>{{fertileWindow.start}} 至 {{fertileWindow.end}}</text>
+    </view>
+    <view class="fertile-tip text-secondary">
+      <text wx:if="{{fertilityPurpose === 'pregnancy'}}">💕 备孕最佳时机，祝您好孕！</text>
+      <text wx:if="{{fertilityPurpose === 'contraception'}}">⚠️ 请注意避孕措施</text>
+    </view>
+  </view>
+
+  <!-- 温馨提示 -->
+  <view class="card tips-card">
+    <view class="card-title">💡 温馨提示</view>
+    <view class="tip-list">
+      <view class="tip-item" wx:for="{{tips}}" wx:key="index">
+        <text class="tip-icon">{{item.icon}}</text>
+        <text class="tip-text">{{item.content}}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 预测设置 -->
+  <view class="card settings-card">
+    <view class="card-title">⚙️ 预测设置</view>
+    <view class="setting-item" bindtap="goToSettings">
+      <text class="setting-label">周期长度</text>
+      <text class="setting-value">{{cycleLength}}天 ›</text>
+    </view>
+    <view class="setting-item" bindtap="goToSettings">
+      <text class="setting-label">经期长度</text>
+      <text class="setting-value">{{periodLength}}天 ›</text>
+    </view>
+    <view class="setting-item" bindtap="goToSettings">
+      <text class="setting-label">备孕/避孕模式</text>
+      <text class="setting-value">{{fertilityPurpose === 'pregnancy' ? '备孕' : '避孕'}} ›</text>
+    </view>
+  </view>
+
+  <!-- 刷新按钮 -->
+  <view class="refresh-btn" bindtap="refreshPrediction">
+    🔄 刷新预测
+  </view>
+</view>

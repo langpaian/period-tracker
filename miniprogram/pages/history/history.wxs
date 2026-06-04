@@ -1,0 +1,74 @@
+// pages/history/history.wxs
+
+function formatDisplayDate(dateStr) {
+  if (!dateStr) return ''
+
+  var today = getDate()
+  var yesterday = getDate(today.getTime() - 24 * 60 * 60 * 1000)
+
+  if (dateStr === formatToday(today)) {
+    return '今天'
+  } else if (dateStr === formatToday(yesterday)) {
+    return '昨天'
+  }
+
+  var date = getDate(dateStr)
+  var month = date.getMonth() + 1
+  var day = date.getDate()
+  var weekday = ['周日', '周一', '周二', '周三', '周四', '周五', '周六'][date.getDay()]
+
+  return month + '月' + day + '日 ' + weekday
+}
+
+function formatToday(date) {
+  var year = date.getFullYear()
+  var month = date.getMonth() + 1
+  var day = date.getDate()
+  return year + '-' + month + '-' + day
+}
+
+function formatTime(timestamp) {
+  if (!timestamp) return ''
+
+  var date = getDate(timestamp)
+  var hour = date.getHours()
+  var minute = date.getMinutes()
+
+  return (hour < 10 ? '0' : '') + hour + ':' + (minute < 10 ? '0' : '') + minute
+}
+
+function getFlowText(flow) {
+  var flowMap = {
+    'none': '无',
+    'light': '少量',
+    'medium': '中量',
+    'heavy': '大量'
+  }
+  return flowMap[flow] || '无'
+}
+
+function getSymptomText(symptoms) {
+  if (!symptoms || symptoms.length === 0) return ''
+
+  var symptomMap = {
+    'cramp': '腹痛',
+    'headache': '头痛',
+    'breast': '乳房胀痛',
+    'tired': '疲劳',
+    'mood': '情绪波动',
+    'acne': '痘痘'
+  }
+
+  var result = []
+  for (var i = 0; i < symptoms.length; i++) {
+    result.push(symptomMap[symptoms[i]] || symptoms[i])
+  }
+  return result.join(', ')
+}
+
+module.exports = {
+  formatDisplayDate: formatDisplayDate,
+  formatTime: formatTime,
+  getFlowText: getFlowText,
+  getSymptomText: getSymptomText
+}

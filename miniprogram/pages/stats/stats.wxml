@@ -1,0 +1,52 @@
+<!--pages/stats/stats.wxml-->
+<view class="container">
+  <view class="header">
+    <text class="title">📊 统计报告</text>
+  </view>
+  
+  <!-- 周期统计 -->
+  <view class="card">
+    <view class="card-title">📅 周期统计</view>
+    <view class="stat-row">
+      <text class="stat-label">平均周期</text>
+      <text class="stat-value">{{avgCycle}} 天</text>
+    </view>
+    <view class="stat-row">
+      <text class="stat-label">最短周期</text>
+      <text class="stat-value">{{minCycle}} 天</text>
+    </view>
+    <view class="stat-row">
+      <text class="stat-label">最长周期</text>
+      <text class="stat-value">{{maxCycle}} 天</text>
+    </view>
+  </view>
+  
+  <!-- 经期统计 -->
+  <view class="card">
+    <view class="card-title">🔴 经期统计</view>
+    <view class="stat-row">
+      <text class="stat-label">平均经期</text>
+      <text class="stat-value">{{avgPeriod}} 天</text>
+    </view>
+    <view class="stat-row">
+      <text class="stat-label">记录次数</text>
+      <text class="stat-value">{{recordCount}} 次</text>
+    </view>
+  </view>
+  
+  <!-- 症状统计 -->
+  <view class="card">
+    <view class="card-title">💊 常见症状</view>
+    <view class="symptom-stats">
+      <view class="symptom-stat" wx:for="{{symptomStats}}" wx:key="name">
+        <text class="symptom-name">{{item.name}}</text>
+        <text class="symptom-count">{{item.count}} 次</text>
+      </view>
+    </view>
+  </view>
+  
+  <!-- 重置按钮 -->
+  <view class="reset-btn" bindtap="resetData">
+    <text>🗑️ 清空数据</text>
+  </view>
+</view>

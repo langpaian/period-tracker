@@ -1,0 +1,489 @@
+/* pages/index/index.wxss */
+.container {
+  padding: 20rpx;
+  background: #f5f5f5;
+  min-height: 100vh;
+}
+
+/* Xiao Note 7 Pro 专用适配 */
+.xiao-note-7-pro .container {
+  padding: 24rpx; /* 增大内边距 */
+}
+
+.xiao-note-7-pro .status-card {
+  padding: 44rpx; /* 增大卡片内边距 */
+}
+
+.xiao-note-7-pro .calendar-card {
+  padding: 34rpx; /* 增大日历卡片内边距 */
+}
+
+.xiao-note-7-pro .day-item {
+  aspect-ratio: 1.05; /* 调整日期格子比例 */
+  border-radius: 12rpx; /* 稍微增大圆角 */
+}
+
+.xiao-note-7-pro .day-num {
+  font-size: 30rpx; /* 增大字体 */
+}
+
+.xiao-note-7-pro .nav-btn {
+  font-size: 44rpx; /* 增大导航按钮 */
+  padding: 14rpx 24rpx;
+}
+
+/* 触摸反馈优化 */
+.xiao-note-7-pro .day-item:active {
+  transform: scale(0.92); /* 增大点击反馈 */
+  transition: transform 0.1s ease;
+}
+
+/* 宽屏适配 */
+.large-screen .calendar-days {
+  gap: 14rpx; /* 增大间隔 */
+}
+
+/* 小屏适配 */
+.small-screen .container {
+  padding: 16rpx; /* 减小内边距 */
+}
+
+.small-screen .status-title {
+  font-size: 44rpx; /* 减小字体 */
+}
+
+/* 刘海屏安全区域适配 */
+.notch-screen .container {
+  padding-top: calc(20rpx + var(--status-bar-height, 0));
+}
+
+/* 拖拽提示样式 */
+.drag-hint {
+  position: fixed;
+  top: 20%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(255, 255, 255, 0.95);
+  padding: 24rpx 48rpx;
+  border-radius: 50rpx;
+  font-size: 28rpx;
+  color: #FF6B81;
+  box-shadow: 0 8rpx 24rpx rgba(255, 107, 129, 0.4);
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  gap: 12rpx;
+}
+
+.drag-hint-icon {
+  font-size: 32rpx;
+  animation: pulse 1s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.2);
+  }
+}
+
+/* 状态卡片 */
+.status-card {
+  border-radius: 20rpx;
+  padding: 40rpx;
+  margin-bottom: 20rpx;
+  color: white;
+  text-align: center;
+}
+
+.status-title {
+  font-size: 48rpx;
+  font-weight: bold;
+  margin-bottom: 20rpx;
+}
+
+.status-days {
+  font-size: 36rpx;
+  margin-bottom: 10rpx;
+}
+
+.status-tip {
+  font-size: 28rpx;
+  opacity: 0.9;
+}
+
+/* 日历卡片 */
+.calendar-card {
+  background: white;
+  border-radius: 20rpx;
+  padding: 30rpx;
+  margin-bottom: 20rpx;
+}
+
+.calendar-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20rpx;
+}
+
+.calendar-title {
+  font-size: 36rpx;
+  font-weight: bold;
+  color: #333;
+}
+
+.calendar-nav {
+  display: flex;
+  gap: 20rpx;
+}
+
+.nav-btn {
+  font-size: 40rpx;
+  color: #FF6B81;
+  padding: 10rpx 20rpx;
+  background: #FFF0F3;
+  border-radius: 10rpx;
+}
+
+.calendar-weekdays {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 10rpx;
+  margin-bottom: 10rpx;
+}
+
+.weekday {
+  text-align: center;
+  font-size: 24rpx;
+  color: #999;
+  padding: 10rpx;
+}
+
+.calendar-days {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 10rpx;
+}
+
+.day-item {
+  aspect-ratio: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  padding-top: 6rpx;
+  background: #f9f9f9;
+  border-radius: 10rpx;
+  position: relative;
+  border: 2rpx solid transparent;
+  cursor: pointer;
+  overflow: hidden;
+}
+
+/* 点击反馈 */
+.day-hover {
+  background: #FFE0E6 !important;
+  transform: scale(0.9);
+  transition: all 0.2s;
+}
+
+.day-item.today {
+  border: 2rpx dashed #FF6B81;
+  background: #FFF0F3;
+}
+
+.day-item.period {
+  background: #FFE0E6;
+}
+
+.day-item.predicted-period {
+  background: #FFF0F5;
+}
+
+.day-item.ovulation {
+  background: #E6FFF0;
+}
+
+.day-item.predicted-ovulation {
+  background: #F0FFF5;
+}
+
+.day-item.selected {
+  border: 3rpx solid #FF6B81;
+  background: #FFE0E6;
+}
+
+/* 拖拽选中范围样式 */
+.day-item.range-selected {
+  background: linear-gradient(135deg, #FFB6C1 0%, #FF6B81 100%) !important;
+  color: white;
+  transform: scale(0.95);
+  border: 2rpx solid #FF6B81;
+}
+
+.day-item.range-start {
+  border-top-left-radius: 15rpx;
+  border-bottom-left-radius: 15rpx;
+  background: linear-gradient(135deg, #FF6B81 0%, #FF8FA3 100%) !important;
+}
+
+.day-item.range-end {
+  border-top-right-radius: 15rpx;
+  border-bottom-right-radius: 15rpx;
+  background: linear-gradient(135deg, #FF6B81 0%, #FF8FA3 100%) !important;
+}
+
+.day-num {
+  font-size: 28rpx;
+  color: #333;
+  font-weight: bold;
+  line-height: 1;
+}
+
+.day-mark {
+  font-size: 18rpx;
+  margin-top: 2rpx;
+  line-height: 1;
+  height: 20rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* 日历图例 */
+.calendar-legend {
+  display: flex;
+  justify-content: space-around;
+  margin-top: 20rpx;
+  padding-top: 20rpx;
+  border-top: 1rpx solid #eee;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 8rpx;
+}
+
+.legend-dot {
+  width: 20rpx;
+  height: 20rpx;
+  border-radius: 50%;
+}
+
+.legend-dot.period {
+  background: #FFE0E6;
+}
+
+.legend-dot.ovulation {
+  background: #E6FFF0;
+}
+
+.legend-dot.today {
+  background: #FFF0F3;
+  border: 2rpx solid #FF6B81;
+}
+
+.legend-mark {
+  font-size: 24rpx;
+}
+
+.legend-text {
+  font-size: 22rpx;
+  color: #666;
+}
+
+/* 日历头部样式 */
+.calendar-title-box {
+  display: flex;
+  align-items: center;
+  padding: 10rpx 20rpx;
+  background: #FFF0F3;
+  border-radius: 15rpx;
+}
+
+.calendar-arrow {
+  font-size: 28rpx;
+  color: #FF6B81;
+  margin-left: 10rpx;
+}
+
+/* 预测卡片 */
+.prediction-card {
+  background: white;
+  border-radius: 20rpx;
+  padding: 30rpx;
+  margin-bottom: 20rpx;
+}
+
+.prediction-title {
+  font-size: 32rpx;
+  font-weight: bold;
+  margin-bottom: 20rpx;
+  color: #333;
+}
+
+.prediction-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20rpx;
+}
+
+.prediction-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20rpx;
+  background: #f9f9f9;
+  border-radius: 10rpx;
+}
+
+.prediction-item .label {
+  font-size: 24rpx;
+  color: #666;
+  margin-bottom: 10rpx;
+}
+
+.prediction-item .value {
+  font-size: 28rpx;
+  font-weight: bold;
+  color: #FF6B81;
+}
+
+/* 快捷功能 */
+.quick-actions {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20rpx;
+}
+
+.action-item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20rpx;
+  background: white;
+  border-radius: 15rpx;
+  margin: 0 10rpx;
+}
+
+.action-icon {
+  font-size: 40rpx;
+  margin-bottom: 10rpx;
+}
+
+.action-text {
+  font-size: 24rpx;
+  color: #666;
+}
+
+/* 记录按钮 */
+.record-btn {
+  position: fixed;
+  bottom: 100rpx;
+  left: 50%;
+  transform: translateX(-50%);
+  background: linear-gradient(135deg, #FF6B81 0%, #FF8FA3 100%);
+  color: white;
+  padding: 30rpx 80rpx;
+  border-radius: 50rpx;
+  font-size: 32rpx;
+  font-weight: bold;
+  box-shadow: 0 10rpx 30rpx rgba(255, 107, 129, 0.4);
+}
+
+/* 备注弹窗 */
+.note-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s;
+}
+
+.note-modal.show {
+  opacity: 1;
+  visibility: visible;
+}
+
+.note-modal-content {
+  background: white;
+  border-radius: 20rpx;
+  width: 600rpx;
+  max-height: 80vh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.note-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 30rpx;
+  border-bottom: 1rpx solid #eee;
+}
+
+.note-modal-title {
+  font-size: 32rpx;
+  font-weight: bold;
+  color: #333;
+}
+
+.note-modal-close {
+  font-size: 32rpx;
+  color: #999;
+  padding: 10rpx;
+}
+
+.note-modal-date {
+  padding: 20rpx 30rpx;
+  font-size: 28rpx;
+  color: #666;
+  background: #f9f9f9;
+}
+
+.note-modal-body {
+  padding: 30rpx;
+  font-size: 28rpx;
+  color: #333;
+  line-height: 1.6;
+  max-height: 400rpx;
+  overflow-y: auto;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+
+.note-modal-footer {
+  display: flex;
+  padding: 30rpx;
+  border-top: 1rpx solid #eee;
+  gap: 20rpx;
+}
+
+.note-modal-btn {
+  flex: 1;
+  text-align: center;
+  padding: 20rpx;
+  background: #f9f9f9;
+  border-radius: 10rpx;
+  font-size: 28rpx;
+  color: #666;
+}
+
+.note-modal-btn.primary {
+  background: linear-gradient(135deg, #FF6B81 0%, #FF8FA3 100%);
+  color: white;
+}

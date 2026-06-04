@@ -1,0 +1,57 @@
+<!--pages/history/history.wxml-->
+<wxs module="fmt" src="./history.wxs"></wxs>
+
+<view class="container">
+  <view class="header">
+    <text class="title">📋 历史记录</text>
+    <text class="subtitle">共 {{records.length}} 条记录</text>
+  </view>
+
+  <view class="records-list" wx:if="{{records.length > 0}}">
+    <view
+      class="record-item"
+      wx:for="{{records}}"
+      wx:key="date"
+      data-date="{{item.date}}"
+      bindtap="onRecordTap"
+      bindlongpress="onRecordLongTap"
+    >
+      <view class="record-date">
+        <text class="date-main">{{item.date}}</text>
+        <text class="date-sub">{{fmt.formatDisplayDate(item.date)}}</text>
+      </view>
+
+      <view class="record-content">
+        <view class="record-flow">
+          <text class="flow-icon">{{item.flow !== 'none' ? '🔴' : '⚪'}}</text>
+          <text class="flow-text">{{fmt.getFlowText(item.flow)}}</text>
+        </view>
+
+        <view class="record-symptoms" wx:if="{{item.symptoms && item.symptoms.length > 0}}">
+          <text class="symptom-icon">💊</text>
+          <text class="symptom-text">{{fmt.getSymptomText(item.symptoms)}}</text>
+        </view>
+
+        <view class="record-note" wx:if="{{item.note && item.note.trim() !== ''}}">
+          <text class="note-icon">📝</text>
+          <text class="note-text">{{item.note}}</text>
+        </view>
+
+        <view class="record-tags">
+          <text class="tag tag-start" wx:if="{{item.isPeriodStart}}">经期开始</text>
+          <text class="tag tag-end" wx:if="{{item.isPeriodEnd}}">经期结束</text>
+        </view>
+      </view>
+
+      <view class="record-time">
+        <text class="time-text">更新于 {{item.updatedAt ? fmt.formatTime(item.updatedAt) : ''}}</text>
+      </view>
+    </view>
+  </view>
+
+  <view class="empty-state" wx:else>
+    <text class="empty-icon">📋</text>
+    <text class="empty-text">暂无历史记录</text>
+    <text class="empty-hint">长按记录可删除</text>
+  </view>
+</view>

@@ -1,0 +1,176 @@
+/* pages/predict/predict.wxss */
+
+.container {
+  padding: 16px;
+  padding-bottom: 30px;
+}
+
+.page-title {
+  font-size: 20px;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 16px;
+  text-align: center;
+}
+
+/* 预测卡片 */
+.predict-card {
+  text-align: center;
+  padding: 24px 16px;
+  margin-bottom: 16px;
+}
+
+.predict-card.primary {
+  background: linear-gradient(135deg, #FF6B8A 0%, #FFB6C1 100%);
+  color: #FFFFFF;
+}
+
+.predict-card.ovulation {
+  background: linear-gradient(135deg, #FAAD14 0%, #FFE58F 100%);
+  color: #FFFFFF;
+}
+
+.predict-icon {
+  font-size: 48px;
+  margin-bottom: 12px;
+}
+
+.predict-title {
+  font-size: 16px;
+  opacity: 0.9;
+  margin-bottom: 8px;
+}
+
+.predict-date {
+  font-size: 32px;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+.predict-days {
+  font-size: 14px;
+  opacity: 0.8;
+  margin-bottom: 16px;
+}
+
+/* 置信度 */
+.predict-confidence {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-size: 13px;
+}
+
+.confidence-bar {
+  width: 100px;
+  height: 6px;
+  background-color: rgba(255, 255, 255, 0.3);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.confidence-fill {
+  height: 100%;
+  background-color: #FFFFFF;
+  border-radius: 3px;
+  transition: width 0.3s;
+}
+
+/* 排卵期提示 */
+.ovulation-tip {
+  margin-top: 12px;
+  padding: 8px 16px;
+  background-color: rgba(255, 255, 255, 0.2);
+  border-radius: 20px;
+  font-size: 13px;
+}
+
+/* 易孕期卡片 */
+.fertile-card {
+  margin-bottom: 16px;
+}
+
+.fertile-window {
+  font-size: 18px;
+  font-weight: 500;
+  color: #FF6B8A;
+  margin: 12px 0;
+}
+
+.fertile-tip {
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+/* 温馨提示 */
+.tips-card {
+  margin-bottom: 16px;
+}
+
+.tip-list {
+  padding: 8px 0;
+}
+
+.tip-item {
+  display: flex;
+  align-items: flex-start;
+  margin-bottom: 12px;
+  line-height: 1.6;
+}
+
+.tip-icon {
+  font-size: 18px;
+  margin-right: 8px;
+  flex-shrink: 0;
+}
+
+.tip-text {
+  font-size: 14px;
+  color: #666;
+}
+
+/* 设置卡片 */
+.settings-card {
+  margin-bottom: 16px;
+}
+
+.setting-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 0;
+  border-bottom: 1px solid #F0F0F0;
+}
+
+.setting-item:last-child {
+  border-bottom: none;
+}
+
+.setting-label {
+  font-size: 14px;
+  color: #333;
+}
+
+.setting-value {
+  font-size: 14px;
+  color: #999;
+}
+
+/* 刷新按钮 */
+.refresh-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 14px;
+  background-color: #FFFFFF;
+  border-radius: 12px;
+  color: #FF6B8A;
+  font-size: 15px;
+  font-weight: 500;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.refresh-btn:active {
+  opacity: 0.7;
+}

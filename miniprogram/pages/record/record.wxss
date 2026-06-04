@@ -1,0 +1,216 @@
+/* pages/record/record.wxss */
+.container {
+  padding: 20rpx;
+  background: #f5f5f5;
+  min-height: 100vh;
+}
+
+.header {
+  text-align: center;
+  padding: 30rpx 0;
+  position: relative;
+}
+
+.date-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10rpx;
+}
+
+.nav-btn {
+  font-size: 24rpx;
+  color: #FF6B81;
+  padding: 10rpx 20rpx;
+  background: #FFF0F3;
+  border-radius: 10rpx;
+}
+
+.nav-btn:active {
+  background: #FFE0E6;
+}
+
+.title {
+  font-size: 40rpx;
+  font-weight: bold;
+  display: block;
+  margin-bottom: 10rpx;
+}
+
+.date {
+  font-size: 28rpx;
+  color: #666;
+}
+
+.edit-time {
+  margin-top: 10rpx;
+}
+
+.edit-time-text {
+  font-size: 24rpx;
+  color: #999;
+}
+
+.section {
+  background: white;
+  border-radius: 20rpx;
+  padding: 30rpx;
+  margin-bottom: 20rpx;
+}
+
+.section-title {
+  font-size: 32rpx;
+  font-weight: bold;
+  margin-bottom: 20rpx;
+  color: #333;
+}
+
+/* 流量选择器 */
+.flow-selector {
+  display: flex;
+  justify-content: space-between;
+}
+
+.flow-item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20rpx;
+  border-radius: 15rpx;
+  margin: 0 10rpx;
+  background: #f9f9f9;
+  border: 2rpx solid transparent;
+}
+
+.flow-item.active {
+  background: linear-gradient(135deg, #FFF0F3 0%, #FFE0E6 100%);
+  border: 2rpx solid #FF6B81;
+}
+
+.flow-item .icon {
+  font-size: 40rpx;
+  margin-bottom: 10rpx;
+}
+
+.flow-item .text {
+  font-size: 24rpx;
+  color: #666;
+}
+
+.flow-item.active .text {
+  color: #FF6B81;
+  font-weight: bold;
+}
+
+/* 快捷按钮：经期开始/结束 */
+.quick-actions {
+  display: flex;
+  gap: 20rpx;
+  margin-top: 20rpx;
+}
+
+.quick-btn {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 25rpx;
+  background: #f9f9f9;
+  border-radius: 15rpx;
+  border: 2rpx solid transparent;
+  transition: all 0.3s;
+}
+
+.quick-btn.active {
+  background: linear-gradient(135deg, #FF6B81 0%, #FF8FA3 100%);
+  border: 2rpx solid #FF6B81;
+}
+
+.quick-btn .btn-icon {
+  font-size: 36rpx;
+  margin-bottom: 8rpx;
+}
+
+.quick-btn .btn-text {
+  font-size: 24rpx;
+  color: #666;
+}
+
+.quick-btn.active .btn-text {
+  color: white;
+  font-weight: bold;
+}
+
+.quick-btn:active {
+  transform: scale(0.95);
+}
+
+/* 症状网格 */
+.symptoms-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 20rpx;
+}
+
+.symptom-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 25rpx 15rpx;
+  background: #f9f9f9;
+  border-radius: 15rpx;
+  font-size: 24rpx;
+  color: #666;
+  border: 2rpx solid #e0e0e0;
+  transition: all 0.3s;
+  min-height: 100rpx;
+}
+
+/* 选中状态 - 明显的粉色 */
+.symptom-item.active {
+  background: linear-gradient(135deg, #FF6B81 0%, #FF8FA3 100%);
+  border: 2rpx solid #FF6B81;
+  color: white;
+  font-weight: bold;
+  box-shadow: 0 6rpx 16rpx rgba(255, 107, 129, 0.4);
+  transform: translateY(-2rpx);
+}
+
+/* 点击反馈 */
+.symptom-hover {
+  background: #FFE0E6 !important;
+  transform: scale(0.95);
+}
+
+/* 备注输入框 */
+.note-input {
+  width: 100%;
+  min-height: 200rpx;
+  padding: 20rpx;
+  background: #f9f9f9;
+  border-radius: 10rpx;
+  font-size: 28rpx;
+}
+
+/* 保存按钮 */
+.save-btn {
+  position: fixed;
+  bottom: 100rpx;
+  left: 50%;
+  transform: translateX(-50%);
+  background: linear-gradient(135deg, #FF6B81 0%, #FF8FA3 100%);
+  color: white;
+  padding: 30rpx 80rpx;
+  border-radius: 50rpx;
+  font-size: 32rpx;
+  font-weight: bold;
+  box-shadow: 0 10rpx 30rpx rgba(255, 107, 129, 0.4);
+  z-index: 100;
+}
+
+.save-btn:active {
+  transform: translateX(-50%) scale(0.95);
+}

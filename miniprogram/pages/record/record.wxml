@@ -1,0 +1,130 @@
+<!--pages/record/record.wxml-->
+<view class="container">
+  <view class="header">
+    <view class="date-nav">
+      <view class="nav-btn" bindtap="prevDay">‹ 前一天</view>
+      <view class="date-selector" bindtap="selectDate">
+        <text class="title">📝 {{isEdit ? '编辑记录' : '新建记录'}}</text>
+        <text class="date">{{selectedDate}}</text>
+        <text class="arrow">›</text>
+      </view>
+      <view class="nav-btn" bindtap="nextDay">后一天 ›</view>
+    </view>
+    <!-- 最后编辑时间 -->
+    <view class="edit-time" wx:if="{{lastEditTime}}">
+      <text class="edit-time-text">上次编辑：{{lastEditTime}}</text>
+    </view>
+  </view>
+
+  <!-- 经期记录 -->
+  <view class="section">
+    <view class="section-title">🔴 经期记录</view>
+    <view class="flow-selector">
+      <view
+        class="flow-item {{flow === 'none' ? 'active' : ''}}"
+        bindtap="selectFlow"
+        data-flow="none"
+      >
+        <text class="icon">⚪</text>
+        <text class="text">无</text>
+      </view>
+      <view
+        class="flow-item {{flow === 'light' ? 'active' : ''}}"
+        bindtap="selectFlow"
+        data-flow="light"
+      >
+        <text class="icon">🩸</text>
+        <text class="text">少量</text>
+      </view>
+      <view
+        class="flow-item {{flow === 'medium' ? 'active' : ''}}"
+        bindtap="selectFlow"
+        data-flow="medium"
+      >
+        <text class="icon">🩸🩸</text>
+        <text class="text">中量</text>
+      </view>
+      <view
+        class="flow-item {{flow === 'heavy' ? 'active' : ''}}"
+        bindtap="selectFlow"
+        data-flow="heavy"
+      >
+        <text class="icon">🩸🩸🩸</text>
+        <text class="text">大量</text>
+      </view>
+    </view>
+
+  </view>
+  
+  <!-- 症状记录 -->
+  <view class="section">
+    <view class="section-title">💊 症状记录</view>
+    <view class="symptoms-grid">
+      <view 
+        class="symptom-item {{symptomCramp ? 'active' : ''}}"
+        bindtap="toggleSymptom"
+        data-symptom="cramp"
+        hover-class="symptom-hover"
+      >
+        🤕 腹痛
+      </view>
+      <view 
+        class="symptom-item {{symptomHeadache ? 'active' : ''}}"
+        bindtap="toggleSymptom"
+        data-symptom="headache"
+        hover-class="symptom-hover"
+      >
+        🤕 头痛
+      </view>
+      <view 
+        class="symptom-item {{symptomBreast ? 'active' : ''}}"
+        bindtap="toggleSymptom"
+        data-symptom="breast"
+        hover-class="symptom-hover"
+      >
+        🤕 乳房胀痛
+      </view>
+      <view 
+        class="symptom-item {{symptomTired ? 'active' : ''}}"
+        bindtap="toggleSymptom"
+        data-symptom="tired"
+        hover-class="symptom-hover"
+      >
+        😴 疲劳
+      </view>
+      <view 
+        class="symptom-item {{symptomMood ? 'active' : ''}}"
+        bindtap="toggleSymptom"
+        data-symptom="mood"
+        hover-class="symptom-hover"
+      >
+        😊 情绪波动
+      </view>
+      <view 
+        class="symptom-item {{symptomAcne ? 'active' : ''}}"
+        bindtap="toggleSymptom"
+        data-symptom="acne"
+        hover-class="symptom-hover"
+      >
+        🧐 痘痘
+      </view>
+    </view>
+  </view>
+  
+  <!-- 备注 -->
+  <view class="section">
+    <view class="section-title">📝 备注</view>
+    <textarea 
+      class="note-input"
+      placeholder="记录其他情况..."
+      value="{{note}}"
+      bindinput="onNoteInput"
+      maxlength="200"
+    />
+  </view>
+  
+  <!-- 保存按钮 -->
+  <view class="save-btn" bindtap="saveRecord">
+    <text>💾 保存记录</text>
+  </view>
+</view>
