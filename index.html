@@ -2,17 +2,363 @@
 <html lang="zh-CN">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/period-tracker/favicon.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌸</text></svg>" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
     <meta name="theme-color" content="#FFF8FA" />
     <meta name="description" content="经期助手 - 简洁美观的经期记录与预测应用" />
     <title>经期助手 🌸</title>
-    <script type="module" crossorigin src="/period-tracker/assets/index-CzRhJCS4.js"></script>
-    <link rel="stylesheet" crossorigin href="/period-tracker/assets/index-CCt3-Xp_.css">
+    <style>
+      * { box-sizing: border-box; margin: 0; padding: 0; }
+      body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #FFF8FA; color: #333; min-height: 100vh; }
+      .page { display: none; padding: 20px; }
+      .page.active { display: block; }
+      
+      /* 引导页 */
+      .welcome { text-align: center; padding: 40px 20px; }
+      .welcome h1 { color: #FF6B9D; font-size: 28px; margin-bottom: 12px; }
+      .welcome p { color: #999; font-size: 14px; margin-bottom: 30px; line-height: 1.6; }
+      .input { width: 100%; padding: 14px; border: 1px solid #eee; border-radius: 12px; font-size: 16px; margin-bottom: 16px; text-align: center; }
+      .input:focus { outline: none; border-color: #FF6B9D; }
+      
+      /* 主界面 */
+      .header { text-align: center; padding: 20px; }
+      .header h1 { color: #FF6B9D; font-size: 22px; margin-bottom: 4px; }
+      .header .user { font-size: 12px; color: #999; }
+      .tabs { display: flex; gap: 8px; margin: 16px 0; justify-content: center; }
+      .tab { padding: 8px 16px; background: #fff; border: 1px solid #f0f0f0; border-radius: 20px; font-size: 14px; cursor: pointer; }
+      .tab.active { background: #FF6B9D; color: #fff; border-color: #FF6B9D; }
+      
+      /* 日历 */
+      .cal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+      .cal-title { font-size: 16px; font-weight: 500; }
+      .cal-nav { background: #fff; border: none; padding: 8px 12px; border-radius: 8px; cursor: pointer; }
+      .cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; text-align: center; font-size: 13px; }
+      .cal-weekday { color: #999; padding: 8px 0; font-size: 12px; }
+      .cal-day { padding: 10px 4px; background: #fff; border-radius: 8px; min-height: 44px; display: flex; align-items: center; justify-content: center; cursor: pointer; }
+      .cal-day.empty { background: transparent; }
+      .cal-day.period { background: #FF6B9D; color: #fff; }
+      .cal-day.predicted { background: #FFE0EC; color: #FF6B9D; }
+      .cal-day.ovulation { background: #87d068; color: #fff; }
+      .cal-day.today { border: 2px solid #FF6B9D; }
+      
+      /* 按钮 */
+      .btn { display: block; width: 100%; padding: 14px; background: #FF6B9D; color: #fff; border: none; border-radius: 12px; font-size: 15px; cursor: pointer; margin: 12px 0; }
+      .btn.secondary { background: #87d068; }
+      .btn:active { opacity: 0.9; }
+      
+      /* 统计 */
+      .stats-card { background: #fff; border-radius: 12px; padding: 16px; margin-bottom: 12px; text-align: center; }
+      .stats-num { font-size: 28px; color: #FF6B9D; font-weight: 600; }
+      .stats-label { font-size: 13px; color: #999; margin-top: 4px; }
+      
+      /* 记录列表 */
+      .periods-list { margin-top: 16px; }
+      .period-item { background: #fff; border-radius: 8px; padding: 12px; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; }
+      .period-dates { font-size: 14px; }
+      .period-days { font-size: 12px; color: #999; }
+      .delete-btn { background: #ff4d4f; color: #fff; border: none; padding: 6px 12px; border-radius: 6px; font-size: 12px; cursor: pointer; }
+      
+      .empty { text-align: center; color: #999; padding: 40px 0; font-size: 14px; }
+      
+      /* 设置 */
+      .setting-item { background: #fff; border-radius: 8px; padding: 14px; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; }
+      .setting-label { font-size: 14px; }
+      .logout-btn { background: #ff4d4f; color: #fff; border: none; padding: 10px 20px; border-radius: 8px; font-size: 14px; cursor: pointer; margin-top: 20px; }
+      
+      /* 用户信息卡片 */
+      .user-card { background: #fff; border-radius: 12px; padding: 16px; margin-bottom: 16px; text-align: center; }
+      .user-avatar { width: 60px; height: 60px; background: #FFE0EC; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 10px; font-size: 24px; }
+      .user-name { font-size: 16px; font-weight: 500; }
+      .user-id { font-size: 11px; color: #999; margin-top: 4px; }
+    </style>
   </head>
   <body>
-    <div id="app"></div>
+    <div id="app">
+      <!-- 引导页 -->
+      <div class="page" :class="{ active: !user }">
+        <div class="welcome">
+          <h1>🌸 欢迎使用经期助手</h1>
+          <p>记录每一次，<br>更了解自己的身体</p>
+          <input class="input" v-model="nickname" placeholder="请输入你的昵称" maxlength="20" @keyup.enter="completeOnboarding" />
+          <button class="btn" @click="completeOnboarding">开始使用 💕</button>
+        </div>
+      </div>
+      
+      <!-- 主界面 -->
+      <div class="page" :class="{ active: user && view === 'main' }">
+        <div class="header">
+          <h1>🌸 经期助手</h1>
+          <p class="user">{{ user.name }}</p>
+        </div>
+        
+        <div class="user-card">
+          <div class="user-avatar">🌸</div>
+          <div class="user-name">{{ user.name }}</div>
+          <div class="user-id">ID: {{ user.id.slice(0,8) }}</div>
+        </div>
+        
+        <div class="tabs">
+          <div class="tab" :class="{ active: tab === 'calendar' }" @click="tab = 'calendar'">日历</div>
+          <div class="tab" :class="{ active: tab === 'record' }" @click="tab = 'record'">记录</div>
+          <div class="tab" :class="{ active: tab === 'stats' }" @click="tab = 'stats'">统计</div>
+          <div class="tab" :class="{ active: tab === 'settings' }" @click="tab = 'settings'">设置</div>
+        </div>
+        
+        <!-- 日历Tab -->
+        <div class="page" :class="{ active: tab === 'calendar' }">
+          <div class="cal-header">
+            <button class="cal-nav" @click="prevMonth">◀</button>
+            <span class="cal-title">{{ currentMonthName }}</span>
+            <button class="cal-nav" @click="nextMonth">▶</button>
+          </div>
+          <div class="cal-grid">
+            <div v-for="d in weekDays" class="cal-weekday">{{ d }}</div>
+            <div v-for="(d, i) in calendarDays" :key="i" class="cal-day" :class="{ empty: !d.date, period: isPeriod(d), predicted: isPredicted(d), ovulation: isOvulation(d), today: isToday(d) }" @click="togglePeriod(d)">
+              {{ d.date }}
+            </div>
+          </div>
+        </div>
+        
+        <!-- 记录Tab -->
+        <div class="page" :class="{ active: tab === 'record' }">
+          <button class="btn" @click="toggleTodayPeriod">今天来月经 💕</button>
+          <button class="btn secondary" @click="toggleTodayOvulation">今天是排卵日 💙</button>
+          <div class="periods-list" v-if="periods.length">
+            <div v-for="(p, i) in periods" :key="i" class="period-item">
+              <div>
+                <div class="period-dates">{{ formatDate(p.start) }}{{ p.end ? ' - ' + formatDate(p.end) : '' }}</div>
+                <div class="period-days">{{ getDays(p) }}天</div>
+              </div>
+              <button class="delete-btn" @click="deletePeriod(i)">删除</button>
+            </div>
+          </div>
+          <div v-else class="empty">暂无记录<br>点击上方按钮记录</div>
+        </div>
+        
+        <!-- 统计Tab -->
+        <div class="page" :class="{ active: tab === 'stats' }">
+          <div class="stats-card">
+            <div class="stats-num">{{ avgCycle }}</div>
+            <div class="stats-label">平均周期（天）</div>
+          </div>
+          <div class="stats-card">
+            <div class="stats-num">{{ avgLength }}</div>
+            <div class="stats-label">平均经期（天）</div>
+          </div>
+          <div class="stats-card">
+            <div class="stats-num">{{ nextPeriod }}</div>
+            <div class="stats-label">下次预计</div>
+          </div>
+        </div>
+        
+        <!-- 设置Tab -->
+        <div class="page" :class="{ active: tab === 'settings' }">
+          <div class="setting-item">
+            <span class="setting-label">昵称</span>
+            <span>{{ user.name }}</span>
+          </div>
+          <div class="setting-item">
+            <span class="setting-label">用户ID</span>
+            <span style="font-size:12px;color:#999">{{ user.id }}</span>
+          </div>
+          <button class="logout-btn" @click="logout">退出登录</button>
+        </div>
+      </div>
+    </div>
+
+    <script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
+    <script>
+      const { createApp, ref, computed, onMounted } = Vue;
+      
+      // 生成唯一ID
+      const generateId = () => 'xxxx-xxxx-xxxx'.replace(/x/g, () => Math.floor(Math.random() * 16).toString(16));
+      
+      // 云端存储 API (使用 JSONBin.io - 免费方案)
+      const API = {
+        get: async (id) => {
+          try {
+            const res = await fetch('https://api.jsonbin.io/v3/b/' + id + '/latest', {
+              headers: { 'X-Master-Key': 'YOUR_API_KEY_HERE' }
+            });
+            return res.ok ? res.json() : null;
+          } catch { return null; }
+        },
+        save: async (id, data) => {
+          try {
+            await fetch('https://api.jsonbin.io/v3/b/' + id, {
+              method: 'PUT',
+              headers: { 
+                'Content-Type': 'application/json',
+                'X-Master-Key': 'YOUR_API_KEY_HERE'
+              },
+              body: JSON.stringify(data)
+            });
+          } catch {}
+        }
+      };
+      
+      const App = {
+        setup() {
+          const user = ref(null);
+          const nickname = ref('');
+          const tab = ref('calendar');
+          const currentMonth = ref(new Date());
+          const periods = ref([]);
+          const ovulations = ref([]);
+          const weekDays = ['日', '一', '二', '三', '四', '五', '六'];
+          
+          // 检查本地存储的用户
+          onMounted(() => {
+            const saved = localStorage.getItem('period_user');
+            if (saved) {
+              user.value = JSON.parse(saved);
+              periods.value = JSON.parse(localStorage.getItem('periods') || '[]');
+              ovulations.value = JSON.parse(localStorage.getItem('ovulations') || '[]');
+            }
+          });
+          
+          // 完成引导
+          const completeOnboarding = () => {
+            if (!nickname.value.trim()) return;
+            const newUser = {
+              id: generateId(),
+              name: nickname.value.trim(),
+              created: new Date().toISOString()
+            };
+            user.value = newUser;
+            localStorage.setItem('period_user', JSON.stringify(newUser));
+          };
+          
+          // 退出登录
+          const logout = () => {
+            if (confirm('确定要退出登录吗？本地数据会保留。')) {
+              localStorage.removeItem('period_user');
+              user.value = null;
+              nickname.value = '';
+              tab.value = 'calendar';
+            }
+          };
+          
+          const currentMonthName = computed(() => {
+            return currentMonth.value.toLocaleDateString('zh-CN', { year: 'numeric', month: 'long' });
+          });
+          
+          const calendarDays = computed(() => {
+            const year = currentMonth.value.getFullYear();
+            const month = currentMonth.value.getMonth();
+            const firstDay = new Date(year, month, 1);
+            const lastDay = new Date(year, month + 1, 0);
+            const days = [];
+            for (let i = 0; i < firstDay.getDay(); i++) days.push({});
+            for (let i = 1; i <= lastDay.getDate(); i++) {
+              days.push({ date: i, full: new Date(year, month, i) });
+            }
+            return days;
+          });
+          
+          const prevMonth = () => {
+            currentMonth.value = new Date(currentMonth.value.getFullYear(), currentMonth.value.getMonth() - 1);
+          };
+          const nextMonth = () => {
+            currentMonth.value = new Date(currentMonth.value.getFullYear(), currentMonth.value.getMonth() + 1);
+          };
+          
+          const isToday = (d) => d.full && d.full.toDateString() === new Date().toDateString();
+          
+          const isPeriod = (d) => {
+            if (!d.full) return false;
+            return periods.value.some(p => {
+              const start = new Date(p.start);
+              const end = p.end ? new Date(p.end) : new Date(start.getTime() + 5*24*60*60*1000);
+              return d.full >= start && d.full <= end;
+            });
+          };
+          
+          const isOvulation = (d) => {
+            if (!d.full) return false;
+            return ovulations.value.some(o => d.full.toISOString().split('T')[0] === o);
+          };
+          
+          const isPredicted = (d) => {
+            if (!d.full || !periods.value.length) return false;
+            const sorted = [...periods.value].sort((a,b) => new Date(a.start) - new Date(b.start));
+            const last = sorted[sorted.length - 1];
+            if (!last) return false;
+            const next = new Date(new Date(last.start).getTime() + 28*24*60*60*1000);
+            return d.full >= next && d.full < new Date(next.getTime() + 7*24*60*60*1000);
+          };
+          
+          const togglePeriod = (d) => {
+            if (!d.full) return;
+            const exists = periods.value.findIndex(p => {
+              const start = new Date(p.start);
+              const end = p.end ? new Date(p.end) : new Date(start.getTime() + 5*24*60*60*1000);
+              return d.full >= start && d.full <= end;
+            });
+            if (exists >= 0) {
+              periods.value.splice(exists, 1);
+            } else {
+              periods.value.push({ start: d.full.toISOString().split('T')[0], end: null });
+            }
+            localStorage.setItem('periods', JSON.stringify(periods.value));
+          };
+          
+          const toggleTodayPeriod = () => togglePeriod({ full: new Date() });
+          
+          const toggleTodayOvulation = () => {
+            const today = new Date().toISOString().split('T')[0];
+            const idx = ovulations.value.indexOf(today);
+            if (idx >= 0) ovulations.value.splice(idx, 1);
+            else ovulations.value.push(today);
+            localStorage.setItem('ovulations', JSON.stringify(ovulations.value));
+          };
+          
+          const formatDate = (d) => new Date(d).toLocaleDateString('zh-CN', { month: 'short', day: 'numeric' });
+          
+          const getDays = (p) => {
+            const start = new Date(p.start);
+            const end = p.end ? new Date(p.end) : new Date(start.getTime() + 5*24*60*60*1000);
+            return Math.ceil((end - start) / (24*60*60*1000)) + 1;
+          };
+          
+          const deletePeriod = (i) => {
+            periods.value.splice(i, 1);
+            localStorage.setItem('periods', JSON.stringify(periods.value));
+          };
+          
+          const avgCycle = computed(() => {
+            if (periods.value.length < 2) return '--';
+            const sorted = [...periods.value].sort((a,b) => new Date(a.start) - new Date(b.start));
+            let total = 0;
+            for (let i = 1; i < sorted.length; i++) {
+              total += (new Date(sorted[i].start) - new Date(sorted[i-1].start)) / (24*60*60*1000);
+            }
+            return Math.round(total / (sorted.length - 1));
+          });
+          
+          const avgLength = computed(() => {
+            if (!periods.value.length) return '--';
+            let total = 0;
+            periods.value.forEach(p => total += getDays(p));
+            return Math.round(total / periods.value.length);
+          });
+          
+          const nextPeriod = computed(() => {
+            if (!periods.value.length) return '--';
+            const sorted = [...periods.value].sort((a,b) => new Date(a.start) - new Date(b.start));
+            const last = sorted[sorted.length - 1];
+            const next = new Date(new Date(last.start).getTime() + 28*24*60*60*1000);
+            const days = Math.ceil((next - new Date()) / (24*60*60*1000));
+            return days > 0 ? days + '天后' : '--';
+          });
+          
+          return { user, nickname, tab, currentMonthName, calendarDays, weekDays, prevMonth, nextMonth, isToday, isPeriod, isOvulation, isPredicted, togglePeriod, toggleTodayPeriod, toggleTodayOvulation, periods, formatDate, getDays, deletePeriod, avgCycle, avgLength, nextPeriod, completeOnboarding, logout };
+        },
+        template: document.getElementById('app').innerHTML
+      };
+      
+      createApp(App).mount('#app');
+    </script>
   </body>
 </html>
