@@ -74,98 +74,7 @@
     </style>
   </head>
   <body>
-    <div id="app">
-      <!-- 引导页 -->
-      <div class="page" :class="{ active: !user }">
-        <div class="welcome">
-          <h1>🌸 欢迎使用经期助手</h1>
-          <p>记录每一次，<br>更了解自己的身体</p>
-          <input class="input" v-model="nickname" placeholder="请输入你的昵称" maxlength="20" @keyup.enter="completeOnboarding" />
-          <button class="btn" @click="completeOnboarding">开始使用 💕</button>
-        </div>
-      </div>
-      
-      <!-- 主界面 -->
-      <div class="page" :class="{ active: user && view === 'main' }">
-        <div class="header">
-          <h1>🌸 经期助手</h1>
-          <p class="user">{{ user.name }}</p>
-        </div>
-        
-        <div class="user-card">
-          <div class="user-avatar">🌸</div>
-          <div class="user-name">{{ user.name }}</div>
-          <div class="user-id">ID: {{ user.id.slice(0,8) }}</div>
-        </div>
-        
-        <div class="tabs">
-          <div class="tab" :class="{ active: tab === 'calendar' }" @click="tab = 'calendar'">日历</div>
-          <div class="tab" :class="{ active: tab === 'record' }" @click="tab = 'record'">记录</div>
-          <div class="tab" :class="{ active: tab === 'stats' }" @click="tab = 'stats'">统计</div>
-          <div class="tab" :class="{ active: tab === 'settings' }" @click="tab = 'settings'">设置</div>
-        </div>
-        
-        <!-- 日历Tab -->
-        <div class="page" :class="{ active: tab === 'calendar' }">
-          <div class="cal-header">
-            <button class="cal-nav" @click="prevMonth">◀</button>
-            <span class="cal-title">{{ currentMonthName }}</span>
-            <button class="cal-nav" @click="nextMonth">▶</button>
-          </div>
-          <div class="cal-grid">
-            <div v-for="d in weekDays" class="cal-weekday">{{ d }}</div>
-            <div v-for="(d, i) in calendarDays" :key="i" class="cal-day" :class="{ empty: !d.date, period: isPeriod(d), predicted: isPredicted(d), ovulation: isOvulation(d), today: isToday(d) }" @click="togglePeriod(d)">
-              {{ d.date }}
-            </div>
-          </div>
-        </div>
-        
-        <!-- 记录Tab -->
-        <div class="page" :class="{ active: tab === 'record' }">
-          <button class="btn" @click="toggleTodayPeriod">今天来月经 💕</button>
-          <button class="btn secondary" @click="toggleTodayOvulation">今天是排卵日 💙</button>
-          <div class="periods-list" v-if="periods.length">
-            <div v-for="(p, i) in periods" :key="i" class="period-item">
-              <div>
-                <div class="period-dates">{{ formatDate(p.start) }}{{ p.end ? ' - ' + formatDate(p.end) : '' }}</div>
-                <div class="period-days">{{ getDays(p) }}天</div>
-              </div>
-              <button class="delete-btn" @click="deletePeriod(i)">删除</button>
-            </div>
-          </div>
-          <div v-else class="empty">暂无记录<br>点击上方按钮记录</div>
-        </div>
-        
-        <!-- 统计Tab -->
-        <div class="page" :class="{ active: tab === 'stats' }">
-          <div class="stats-card">
-            <div class="stats-num">{{ avgCycle }}</div>
-            <div class="stats-label">平均周期（天）</div>
-          </div>
-          <div class="stats-card">
-            <div class="stats-num">{{ avgLength }}</div>
-            <div class="stats-label">平均经期（天）</div>
-          </div>
-          <div class="stats-card">
-            <div class="stats-num">{{ nextPeriod }}</div>
-            <div class="stats-label">下次预计</div>
-          </div>
-        </div>
-        
-        <!-- 设置Tab -->
-        <div class="page" :class="{ active: tab === 'settings' }">
-          <div class="setting-item">
-            <span class="setting-label">昵称</span>
-            <span>{{ user.name }}</span>
-          </div>
-          <div class="setting-item">
-            <span class="setting-label">用户ID</span>
-            <span style="font-size:12px;color:#999">{{ user.id }}</span>
-          </div>
-          <button class="logout-btn" @click="logout">退出登录</button>
-        </div>
-      </div>
-    </div>
+    <div id="app"><!-- Vue will render here --></div>
 
     <script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
     <script>
@@ -354,11 +263,103 @@
           });
           
           return { user, nickname, tab, currentMonthName, calendarDays, weekDays, prevMonth, nextMonth, isToday, isPeriod, isOvulation, isPredicted, togglePeriod, toggleTodayPeriod, toggleTodayOvulation, periods, formatDate, getDays, deletePeriod, avgCycle, avgLength, nextPeriod, completeOnboarding, logout };
-        },
-        template: document.getElementById('app').innerHTML
+        }
       };
       
-      createApp(App).mount('#app');
+      const appEl = document.getElementById('app');
+      const template = `
+      <!-- 引导页 -->
+      <div class="page" :class="{ active: !user }">
+        <div class="welcome">
+          <h1>🌸 欢迎使用经期助手</h1>
+          <p>记录每一次，<br>更了解自己的身体</p>
+          <input class="input" v-model="nickname" placeholder="请输入你的昵称" maxlength="20" @keyup.enter="completeOnboarding" />
+          <button class="btn" @click="completeOnboarding">开始使用 💕</button>
+        </div>
+      </div>
+      
+      <!-- 主界面 -->
+      <div class="page" :class="{ active: !!user }">
+        <div class="header">
+          <h1>🌸 经期助手</h1>
+          <p class="user">{{ user.name }}</p>
+        </div>
+        
+        <div class="user-card">
+          <div class="user-avatar">🌸</div>
+          <div class="user-name">{{ user.name }}</div>
+          <div class="user-id">ID: {{ user.id.slice(0,8) }}</div>
+        </div>
+        
+        <div class="tabs">
+          <div class="tab" :class="{ active: tab === 'calendar' }" @click="tab = 'calendar'">日历</div>
+          <div class="tab" :class="{ active: tab === 'record' }" @click="tab = 'record'">记录</div>
+          <div class="tab" :class="{ active: tab === 'stats' }" @click="tab = 'stats'">统计</div>
+          <div class="tab" :class="{ active: tab === 'settings' }" @click="tab = 'settings'">设置</div>
+        </div>
+        
+        <!-- 日历Tab -->
+        <div class="page" :class="{ active: tab === 'calendar' }">
+          <div class="cal-header">
+            <button class="cal-nav" @click="prevMonth">◀</button>
+            <span class="cal-title">{{ currentMonthName }}</span>
+            <button class="cal-nav" @click="nextMonth">▶</button>
+          </div>
+          <div class="cal-grid">
+            <div v-for="d in weekDays" class="cal-weekday">{{ d }}</div>
+            <div v-for="(d, i) in calendarDays" :key="i" class="cal-day" :class="{ empty: !d.date, period: isPeriod(d), predicted: isPredicted(d), ovulation: isOvulation(d), today: isToday(d) }" @click="togglePeriod(d)">
+              {{ d.date }}
+            </div>
+          </div>
+        </div>
+        
+        <!-- 记录Tab -->
+        <div class="page" :class="{ active: tab === 'record' }">
+          <button class="btn" @click="toggleTodayPeriod">今天来月经 💕</button>
+          <button class="btn secondary" @click="toggleTodayOvulation">今天是排卵日 💙</button>
+          <div class="periods-list" v-if="periods.length">
+            <div v-for="(p, i) in periods" :key="i" class="period-item">
+              <div>
+                <div class="period-dates">{{ formatDate(p.start) }}{{ p.end ? ' - ' + formatDate(p.end) : '' }}</div>
+                <div class="period-days">{{ getDays(p) }}天</div>
+              </div>
+              <button class="delete-btn" @click="deletePeriod(i)">删除</button>
+            </div>
+          </div>
+          <div v-else class="empty">暂无记录<br>点击上方按钮记录</div>
+        </div>
+        
+        <!-- 统计Tab -->
+        <div class="page" :class="{ active: tab === 'stats' }">
+          <div class="stats-card">
+            <div class="stats-num">{{ avgCycle }}</div>
+            <div class="stats-label">平均周期（天）</div>
+          </div>
+          <div class="stats-card">
+            <div class="stats-num">{{ avgLength }}</div>
+            <div class="stats-label">平均经期（天）</div>
+          </div>
+          <div class="stats-card">
+            <div class="stats-num">{{ nextPeriod }}</div>
+            <div class="stats-label">下次预计</div>
+          </div>
+        </div>
+        
+        <!-- 设置Tab -->
+        <div class="page" :class="{ active: tab === 'settings' }">
+          <div class="setting-item">
+            <span class="setting-label">昵称</span>
+            <span>{{ user.name }}</span>
+          </div>
+          <div class="setting-item">
+            <span class="setting-label">用户ID</span>
+            <span style="font-size:12px;color:#999">{{ user.id }}</span>
+          </div>
+          <button class="logout-btn" @click="logout">退出登录</button>
+        </div>
+      </div>
+      `;
+      createApp({ ...App, template }).mount('#app');
     </script>
   </body>
 </html>
