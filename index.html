@@ -278,8 +278,8 @@
         </div>
       </div>
       
-      <!-- 主界面 -->
-      <div class="page" :class="{ active: !!user }">
+      <!-- 主界面（user 为 null 时不渲染，避免读取 null.name 报错） -->
+      <div v-if="user" class="page" :class="{ active: !!user }">
         <div class="header">
           <h1>🌸 经期助手</h1>
           <p class="user">{{ user.name }}</p>
